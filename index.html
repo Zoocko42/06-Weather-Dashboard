@@ -13,12 +13,22 @@
 <body>
     <header class="d-flex justify-content-center">Weather Dashboard</header>
     <aside id="searchSection" class="d-flex flex-column col-2">
-        <label for="citySearch" class="my-2"><h3>Search for a City:</h3></label>
-        <input type="text" class="my-2" id="citySearch" name="citySearch" placeholder="Atlanta">
-        <button type="button" class="my-2" id="searchButton">Search</button>
+            <label for="citySearch" class="my-2"><h3>Search for a City:</h3></label>
+            <input type="text" class="my-2" id="citySearch" name="citySearch" placeholder="Atlanta">
+            <button type="button" class="my-2" id="searchButton">Search</button>
     </aside>
+    <aside id="clearButton" class="d-flex flex-column col-2">
+        <button type="button" class="my-2" id="clearSearch">Clear Search History</button>
+    </aside>
+    <aside id="cityButtons" class="d-flex flex-column col-2">
+        <!-- Buttons populated based on LocalStorage -->
+    </aside>
+
+    <article >
+       <h3 class="bigBlock">Article!</h3> 
+    </article>
 
 </body>
       
-      
+<script src="./assets/js/script.js"></script>
 </html>

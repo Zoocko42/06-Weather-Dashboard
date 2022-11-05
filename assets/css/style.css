@@ -14,9 +14,29 @@ header {
     margin-left: 1%;
 }
 
-#searchButton {
+button {
     color: whitesmoke;
     background-color: #0071d6;
     border: transparent;
     border-radius: 5px;
+}
+
+button:hover {
+    background-color: #3389d4;
+    transform: scale(1.02);
+}
+
+#listBottom {
+    width: 100%;
+}
+
+#cityButtons, #clearButton {
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+#clearButton {
+    border-bottom: 1px slategray solid;
+    margin-top: 1%;
+    padding-bottom: 1%;
 }
