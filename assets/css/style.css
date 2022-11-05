@@ -1,0 +1,42 @@
+header {
+    background: rgb(23,0,50);
+    background: linear-gradient(270deg, rgba(23,0,50,1) 0%, rgba(0,113,214,1) 100%);
+    color: whitesmoke;
+    padding-bottom: 1%;
+    padding-top: 1%;
+    font-size: 250%;
+    font-weight: bolder;
+}
+
+#searchSection{
+    border-bottom: 1px slategray solid;
+    padding-bottom: 1%;
+    margin-left: 1%;
+}
+
+button {
+    color: whitesmoke;
+    background-color: #0071d6;
+    border: transparent;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #3389d4;
+    transform: scale(1.02);
+}
+
+#listBottom {
+    width: 100%;
+}
+
+#cityButtons, #clearButton {
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+#clearButton {
+    border-bottom: 1px slategray solid;
+    margin-top: 1%;
+    padding-bottom: 1%;
+}

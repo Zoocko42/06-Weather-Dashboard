@@ -4,18 +4,31 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
-    <title>Weather Dashboard</title>
+    <title >Weather Dashboard</title>
 </head>
     <!-- Body -->
 <body>
-    <header>Weather Dashboard</header>
-    <aside>
-        <label for="citySearch"><h3>Search for a City:</h3></label>
-        <input type="text" id="citySearch" name="citySearch">
+    <header class="d-flex justify-content-center">Weather Dashboard</header>
+    <aside id="searchSection" class="d-flex flex-column col-2">
+            <label for="citySearch" class="my-2"><h3>Search for a City:</h3></label>
+            <input type="text" class="my-2" id="citySearch" name="citySearch" placeholder="Atlanta">
+            <button type="button" class="my-2" id="searchButton">Search</button>
     </aside>
+    <aside id="clearButton" class="d-flex flex-column col-2">
+        <button type="button" class="my-2" id="clearSearch">Clear Search History</button>
+    </aside>
+    <aside id="cityButtons" class="d-flex flex-column col-2">
+        <!-- Buttons populated based on LocalStorage -->
+    </aside>
+
+    <article >
+       <h3 class="bigBlock">Article!</h3> 
+    </article>
 
 </body>
       
-      
+<script src="./assets/js/script.js"></script>
 </html>
