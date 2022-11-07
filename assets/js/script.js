@@ -8,9 +8,7 @@ const APIkey = "f700a26284d3a4077a271bbd39e39c99"
 // This code finds the current date in Unix Timestamp, and then creates an array of both today and the next five days in Unix Timestamps as well.
 var today = moment().format("X");
 const fiveDays = [today, ((parseInt(today)+ 86400).toString()), ((parseInt(today)+ (86400 * 2)).toString()), ((parseInt(today)+ (86400 * 3)).toString()), ((parseInt(today)+ (86400 * 4)).toString()), ((parseInt(today)+ (86400 * 5)).toString())]
-var cityLatLon = []
-
-
+var latLon = []
 
 // This section checks local storage to see if cities have been searched by the user. If they have, the cities
 // are pulled from local storage to the searchedCities variable.
@@ -22,23 +20,25 @@ if (prevSearchedCities == []) {
 }
 
 // This converts the user input into longitude and latitude.
-function geoCode (city) {
+async function geoCode (city) {
 
     var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${APIkey}`
 
     fetch(geoAPI).then((response) => {
         return response.json()
      }).then((data) => {
-        cityLatLon.push(data[0].lat)
-        cityLatLon.push(data[0].lon)
+        console.log(data[0].lat)
+        latLon = [data[0].lat, data[0].lon]
      })
 }
 
 // This function fetches the API data for the requested city.
 function weatherCall (city, date) {
-    geoCode(city)
+    var locationData = geoCode(city);
+    console.log(locationData)
+
     var openweather = (`https://api.openweathermap.org/data/2.5/weather?q=${city}&dt=${date}&appid=${APIkey}`);
-    // var openweather = (`api.openweathermap.org/data/2.5/forecast?lat=${cityLatLon[0]}&lon=${cityLatLon[1]}&appid=${APIkey}`)
+    // var openweather = (`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLatLon[0]}&lon=${cityLatLon[1]}&appid=${APIkey}`)
 
     fetch(openweather).then((response) => {
         return response.json()
@@ -75,8 +75,6 @@ function searchCity (event) {
     localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
     searchedCitiesList()
     weatherCall(inputSearch, today)
-    console.log(cityLatLon)
-
 }
 
 // This function clears out the saved searches in local storage.
