@@ -20,33 +20,42 @@ if (prevSearchedCities == []) {
     var searchedCities = prevSearchedCities;
 }
 
-// This converts the user input into longitude and latitude.
-async function geoCode (city) {
-
+// This converts the user input into longitude and latitude so it can be utilized by the forecastCall function.
+function geoCode (city) {
     var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${APIkey}`
-
-    fetch(geoAPI).then((response) => {
+    var response = fetch(geoAPI).then((response) => {
         return response.json()
      }).then((data) => {
-        console.log(data[0].lat)
         latLon = [data[0].lat, data[0].lon]
+        return latLon
      })
+    return response;
 }
 
-// This function fetches the API data for the requested city.
-function weatherCall (city, date) {
-    var locationData = geoCode(city);
-    console.log(locationData)
-
-    var openweather = (`https://api.openweathermap.org/data/2.5/weather?q=${city}&dt=${date}&appid=${APIkey}`);
-    // var openweather = (`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLatLon[0]}&lon=${cityLatLon[1]}&appid=${APIkey}`)
-
-    fetch(openweather).then((response) => {
+// This code pulls the weather information for the current day for the requested city.
+async function todayWeather (city) {
+    var openweather = (`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}`);
+    return fetch(openweather).then((response) => {
         return response.json()
      }).then((data) => {
-        console.log(data)
+        return data
      })
 }
+
+// This function fetches a five-day three-hour forecast for the selected city.
+async function forecastCall (city) {
+    var locationData = await geoCode(city);
+    var openweather = (`https://api.openweathermap.org/data/2.5/forecast?lat=${locationData[0]}&lon=${locationData[1]}&appid=${APIkey}`)
+
+    return fetch(openweather).then((response) => {
+        return response.json()
+     }).then((data) => {
+        return data
+     })
+}
+
+
+
 
 // This function first clears the list of previously searched cities, then adds buttons with the cities based on localStorage.
 function searchedCitiesList () {
@@ -64,8 +73,8 @@ searchedCitiesList()
 
 localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
 
-// This function controls what occurs when a user enters a city and 
-function searchCity (event) {
+// This function controls what occurs when a user enters a city then either hits the search button or hits enter on their keyboard.
+async function searchCity (event) {
     event.preventDefault();
 
     const inputSearch = document.getElementById("citySearch").value;
@@ -79,7 +88,13 @@ function searchCity (event) {
     searchedCities.push(inputSearch);
     localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
     searchedCitiesList()
-    weatherCall(inputSearch, todayUnix)
+
+    // This section takes the data pulled from the forecastCall and the todayWeather functions and saves them as objects.
+    var forecastData = await forecastCall(inputSearch)
+    var weatherData = await todayWeather(inputSearch)
+    console.log(weatherData)
+    console.log(forecastData)
+
 }
 
 // This function clears out the saved searches in local storage.
