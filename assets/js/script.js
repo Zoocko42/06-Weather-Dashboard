@@ -2,8 +2,14 @@ const searchButton = document.getElementById("searchButton");
 const clearButton = document.getElementById("clearSearch");
 const cityButtons = document.getElementById("cityButtons");
 const searchForm = document.getElementById("searchSection");
+const todayForecast = document.getElementById("todayForecast")
+
+// These constants pull populated fields in the todayForecast box, if they are present.
+var todayData = document.getElementsByClassName("todayData")
+var todayTemp = document.getElementById("todayTemp")
 
 const APIkey = "f700a26284d3a4077a271bbd39e39c99"
+const oneCallAPIkey = "9de9a50c9590195121fe2b6ec8fd1876"
 
 // This code finds the current date in Unix Timestamp, and then creates an array of both todayUnix and the next five days in Unix Timestamps as well.
 var todayMDY = moment().format("L");
@@ -20,7 +26,7 @@ if (prevSearchedCities == []) {
     var searchedCities = prevSearchedCities;
 }
 
-// This converts the user input into longitude and latitude so it can be utilized by the forecastCall function.
+// // This converts the user input into longitude and latitude so it can be utilized by the forecastCall function.
 function geoCode (city) {
     var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${APIkey}`
     var response = fetch(geoAPI).then((response) => {
@@ -32,20 +38,10 @@ function geoCode (city) {
     return response;
 }
 
-// This code pulls the weather information for the current day for the requested city.
-async function todayWeather (city) {
-    var openweather = (`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}`);
-    return fetch(openweather).then((response) => {
-        return response.json()
-     }).then((data) => {
-        return data
-     })
-}
-
-// This function fetches a five-day three-hour forecast for the selected city.
-async function forecastCall (city) {
+// This function fetches the forecast for today and up to 8 days in the future.
+async function oneCall (city) {
     var locationData = await geoCode(city);
-    var openweather = (`https://api.openweathermap.org/data/2.5/forecast?lat=${locationData[0]}&lon=${locationData[1]}&appid=${APIkey}`)
+    var openweather = (`https://api.openweathermap.org/data/3.0/onecall?lat=${locationData[0]}&lon=${locationData[1]}&units=imperial&exclude=minutely,hourly,alerts&appid=${oneCallAPIkey}`)
 
     return fetch(openweather).then((response) => {
         return response.json()
@@ -78,9 +74,7 @@ async function searchCity (event) {
     event.preventDefault();
 
     const inputSearch = document.getElementById("citySearch").value;
-
     var cityAndDay = document.getElementById("cityAndDay")
-
     cityAndDay.innerHTML = `${inputSearch} (${todayMDY})`
 
     // This section reads the selected value input by the user in the search bar, and adds it to the searched cities list in local storage.
@@ -89,11 +83,58 @@ async function searchCity (event) {
     localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
     searchedCitiesList()
 
-    // This section takes the data pulled from the forecastCall and the todayWeather functions and saves them as objects.
-    var forecastData = await forecastCall(inputSearch)
-    var weatherData = await todayWeather(inputSearch)
-    console.log(weatherData)
-    console.log(forecastData)
+    // This section takes the data pulled from the oneCall function and saves it as an object.
+    var oneCallData = await oneCall(inputSearch)
+    console.log(oneCallData)
+
+    if (!todayTemp) {
+        // This code adds the current temperature to today's forecast.
+        todayTemp = document.createElement("p");
+        todayTemp.setAttribute("class", "todayData");
+        todayTemp.setAttribute("id", "todayTemp");
+        todayTemp.innerHTML = `Temp: ${oneCallData.current.temp}°F`;
+        todayForecast.appendChild(todayTemp);
+
+        // This code adds current windspeed to today's forecast.
+        todayWind = document.createElement("p");
+        todayWind.setAttribute("class", "todayData");
+        todayWind.setAttribute("id", "todayWind");
+        todayWind.innerHTML = `Wind: ${oneCallData.current.wind_speed} MPH`;
+        todayForecast.appendChild(todayWind);
+        // This adds current humidity to today's forecast.
+        todayHum = document.createElement("p");
+        todayHum.setAttribute("class", "todayData");
+        todayHum.setAttribute("id", "todayHum");
+        todayHum.innerHTML = `Humidity: ${oneCallData.current.humidity}%`;
+        todayForecast.appendChild(todayHum);
+        // This adds the UV index for the day.
+        todayUVI = document.createElement("p");
+        todayUVI.setAttribute("class", "todayData");
+        todayUVI.setAttribute("id", "todayUVI");
+        todayUVI.setAttribute("style", "background-color: transparent")
+        todayUVI.innerHTML = `UV Index: `;
+        todayForecast.appendChild(todayUVI);
+        // This adds the actual number for the UV Index.
+        UVIvalue = document.createElement("p");
+        if (oneCallData.current.uvi < 3) {
+            UVIvalue.setAttribute("style", "display: inline; background-color: green; color: white");
+        } else if (6 > oneCallData.current.uvi >= 3 ) {
+            UVIvalue.setAttribute("style", "display: inline; background-color: yellow; color: white");
+        } else {
+            UVIvalue.setAttribute("style", "display: inline; background-color: red; color: white");
+        };
+        UVIvalue.setAttribute("id", "UVIvalue");
+        UVIvalue.innerHTML = oneCallData.current.uvi
+        todayUVI.appendChild(UVIvalue);
+    } else {
+        todayTemp.innerHTML = `Temp: ${oneCallData.current.temp}°F`;
+        todayWind.innerHTML = `Wind: ${oneCallData.current.wind_speed} MPH`;
+        todayHum.innerHTML = `Humidity: ${oneCallData.current.humidity}%`;
+        todayUVI.innerHTML = `UV Index: `;
+        todayUVI.appendChild(UVIvalue);
+        UVIvalue.innerHTML = oneCallData.current.uvi;
+    }
+
 
 }
 

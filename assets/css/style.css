@@ -47,15 +47,25 @@ button:hover {
     left: 20%;
     top: 15%;
     width: 78%;
-    height: 25%;
+    height: 32%;
 }
 
 #cityAndDay {
-    padding: 1%;
+    padding-top: 1%;
+}
+
+#cityAndDay, .todayData{
+    padding-left: 1%;
+}
+
+#UVIvalue {
+    z-index: 2;
+    position: relative;
 }
 
 @media only screen and (max-width: 374px) {
     #todayForecast {
-        top: 18%
+        top: 18%;
+        left: 25%;
     }
 }
