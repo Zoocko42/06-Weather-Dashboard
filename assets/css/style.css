@@ -40,3 +40,50 @@ button:hover {
     margin-top: 1%;
     padding-bottom: 1%;
 }
+
+#todayForecast {
+    position: absolute;
+    border: 1px slategray solid;
+    left: 20%;
+    top: 15%;
+    width: 78%;
+    height: 34%;
+}
+
+#cityAndDay {
+    padding-top: 1%;
+}
+
+#cityAndDay, .todayData{
+    padding-left: 1%;
+}
+
+.todayData {
+    font-size: large;
+}
+
+#UVIvalue {
+    z-index: 2;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: .5%;
+    padding-bottom: .5%;
+    font-size: small;
+}
+
+#fiveDayCards {
+    position: absolute;
+    left: 20%;
+    top: 52%;
+    width: 78%;
+    height: 45%;
+}
+
+@media only screen and (max-width: 374px) {
+    #todayForecast {
+        top: 18%;
+        left: 25%;
+    }
+}
