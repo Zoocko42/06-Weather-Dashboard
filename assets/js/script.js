@@ -87,6 +87,7 @@ async function searchCity (event) {
     var oneCallData = await oneCall(inputSearch)
     console.log(oneCallData)
 
+    // This checks to see if the current forecast has already been populated; if so it merely updates the values, if not then it populates the values.
     if (!todayTemp) {
         // This code adds the current temperature to today's forecast.
         todayTemp = document.createElement("p");
