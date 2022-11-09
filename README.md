@@ -17,6 +17,7 @@ current results and displaying the list. The user can also clear the list of pre
 
 ## Site Link
 
+https://zoocko42.github.io/06-Weather-Dashboard/
 ## Authors
 
 Zachariah Schneider
