@@ -69,6 +69,7 @@ function setButtonPressed () {
     document.getElementById("citySearch").setAttribute("value", this.name);
 }
 
+localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
 // This function first clears the list of previously searched cities, then adds buttons with the cities based on localStorage.
 function searchedCitiesList () {
     cityButtons.innerHTML = ""
@@ -90,8 +91,6 @@ function searchedCitiesList () {
     });
 }
 searchedCitiesList()
-
-localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
 
 // This function controls what occurs when a user enters a city then either hits the search button or hits enter on their keyboard.
 async function searchCity (event) {
