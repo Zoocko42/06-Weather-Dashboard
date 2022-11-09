@@ -253,7 +253,8 @@ document.querySelectorAll(".cityButton").forEach(button => {
     button.addEventListener("click", searchCity)
 });
 
-function refreshPage() {
+function refreshPage(event) {
+    event.preventDefault()
     location.reload()
 }
 
