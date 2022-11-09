@@ -21,9 +21,18 @@ button {
     border-radius: 5px;
 }
 
+
+
 button:hover {
     background-color: #3389d4;
     transform: scale(1.02);
+}
+
+button:disabled, button[disabled] {
+    color: whitesmoke;
+    background-color: #3e3e3f;
+    border: transparent;
+    border-radius: 5px;
 }
 
 #listBottom {

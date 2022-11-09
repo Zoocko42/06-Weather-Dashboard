@@ -4,6 +4,7 @@ const cityButtons = document.getElementById("cityButtons");
 const searchForm = document.getElementById("searchSection");
 const todayForecast = document.getElementById("todayForecast");
 const fiveDayCards = document.getElementById("fiveDayCards");
+const refreshButton = document.getElementById("refreshButton")
 var forecastCard = document.getElementById("forecastCard0")
 
 // These constants pull populated fields in the todayForecast box, if they are present.
@@ -29,12 +30,6 @@ function convertToDate(timestamp) {
     return date
 }
 
-// This section finds the location of icons based on 
-
-
-
-var latLon = []
-
 // This section checks local storage to see if cities have been searched by the user. If they have, the cities
 // are pulled from local storage to the searchedCities variable.
 var prevSearchedCities = JSON.parse(localStorage.getItem("searchedCities"))
@@ -45,6 +40,7 @@ if (prevSearchedCities == []) {
 }
 
 // // This converts the user input into longitude and latitude so it can be utilized by the forecastCall function.
+var latLon = []
 function geoCode (city) {
     var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${APIkey}`
     var response = fetch(geoAPI).then((response) => {
@@ -69,19 +65,29 @@ async function oneCall (city) {
 }
 
 
-
+function setButtonPressed () {
+    document.getElementById("citySearch").setAttribute("value", this.name);
+}
 
 // This function first clears the list of previously searched cities, then adds buttons with the cities based on localStorage.
 function searchedCitiesList () {
     cityButtons.innerHTML = ""
 
+    function setButtonPressed () {
+        document.getElementById("citySearch").setAttribute("value", this.name);
+    }
     for (var i = 0; i < searchedCities.length; i++) {
         cityButton = document.createElement('button');
-        cityButton.setAttribute("id", "city" + i)
-        cityButton.setAttribute("style", "margin-top: 1%; margin-bottom: 1%; color: black; background-color: lightgrey;")
+        cityButton.setAttribute("id", "city" + i);
+        cityButton.setAttribute("class", "cityButton");
+        cityButton.setAttribute("name", searchedCities[i]);
+        cityButton.setAttribute("style", "margin-top: 1%; margin-bottom: 1%; color: black; background-color: lightgrey;");
         cityButton.innerHTML = searchedCities[i];
-        cityButtons.appendChild(cityButton)
+        cityButtons.appendChild(cityButton);
     }
+    document.querySelectorAll(".cityButton").forEach(button => {
+        button.addEventListener("click", setButtonPressed);
+    });
 }
 searchedCitiesList()
 
@@ -100,10 +106,17 @@ async function searchCity (event) {
     searchedCities.push(inputSearch);
     localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
     searchedCitiesList()
+    
+    
+    cityButtonList = document.querySelectorAll(".cityButton")
+    await cityButtonList.forEach(button => {
+        button.disabled = true
+        button.setAttribute("style", "display: none")
+    });
+
 
     // This section takes the data pulled from the oneCall function and saves it as an object.
     var oneCallData = await oneCall(inputSearch)
-    console.log(oneCallData)
 
     // This checks to see if the current forecast has already been populated; if so it merely updates the values, if not then it populates the values.
     if (!todayTemp) {
@@ -221,9 +234,20 @@ function clearSearches (event) {
     searchedCitiesList()
 }
 
-// async function
+// This code gives functionality to the previous searched buttons.
+function setButtonPressed () {
+    document.getElementById("citySearch").setAttribute("value", this.name);
+}
+document.querySelectorAll(".cityButton").forEach(button => {
+    button.addEventListener("click", setButtonPressed);
+    button.addEventListener("click", searchCity)
+});
 
+function refreshPage() {
+    location.reload()
+}
 
+refreshButton.addEventListener("click", refreshPage)
 searchForm.addEventListener("submit", searchCity)
 clearButton.addEventListener("click", clearSearches)
 
