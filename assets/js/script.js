@@ -2,7 +2,9 @@ const searchButton = document.getElementById("searchButton");
 const clearButton = document.getElementById("clearSearch");
 const cityButtons = document.getElementById("cityButtons");
 const searchForm = document.getElementById("searchSection");
-const todayForecast = document.getElementById("todayForecast")
+const todayForecast = document.getElementById("todayForecast");
+const fiveDayCards = document.getElementById("fiveDayCards");
+var forecastCard = document.getElementById("forecastCard0")
 
 // These constants pull populated fields in the todayForecast box, if they are present.
 var todayData = document.getElementsByClassName("todayData")
@@ -14,7 +16,23 @@ const oneCallAPIkey = "9de9a50c9590195121fe2b6ec8fd1876"
 // This code finds the current date in Unix Timestamp, and then creates an array of both todayUnix and the next five days in Unix Timestamps as well.
 var todayMDY = moment().format("L");
 var todayUnix = moment().format("X");
-const fiveDays = [todayUnix, ((parseInt(todayUnix)+ 86400).toString()), ((parseInt(todayUnix)+ (86400 * 2)).toString()), ((parseInt(todayUnix)+ (86400 * 3)).toString()), ((parseInt(todayUnix)+ (86400 * 4)).toString()), ((parseInt(todayUnix)+ (86400 * 5)).toString())]
+
+// This code finds the 
+function convertToDate(timestamp) {
+    var d = new Date(timestamp * 1000);
+    var month = d.getMonth() + 1; //The .getMonth() is generally designed to work alongside an array of dates, so January's value is "0". Since this exercise just needs the number we add 1.
+    var day = d.getDate();
+    var year = d.getFullYear();
+    
+    var date = `${month}/${day}/${year}`;
+    
+    return date
+}
+
+// This section finds the location of icons based on 
+
+
+
 var latLon = []
 
 // This section checks local storage to see if cities have been searched by the user. If they have, the cities
@@ -136,7 +154,62 @@ async function searchCity (event) {
         UVIvalue.innerHTML = oneCallData.current.uvi;
     }
 
+    // oneCallData.daily.[i].weather.icon
+    // This section responsively creates the cards for the 5 Day Forecast. If the cards are already populated, then they are deleted and re-created to fit the new parameters.
+    function makeForecast() {
+        for (var i = 0; i < 5; i++) {
 
+            fahrValue = oneCallData.daily[i].temp.day
+
+            // Makes the forecastcards
+            forecastCard = document.createElement("div");
+            forecastCard.setAttribute("id", "forecastCard" + i);
+            forecastCard.setAttribute("class", "forecastCard")
+            fiveDayCards.appendChild(forecastCard);
+
+            // Creates date for forecastCards
+            forecastDate = document.createElement("h5")
+            forecastDate.innerHTML = convertToDate(oneCallData.daily[i].dt)
+            forecastCard.appendChild(forecastDate);
+
+            // Creates icons for forecastCards
+            forecastIcon = document.createElement("img")
+            forecastIcon.setAttribute("class", "forecastData")
+            forecastIcon.setAttribute("src", `http://openweathermap.org/img/wn/${oneCallData.daily[i].weather[0].icon}.png`)
+            forecastCard.appendChild(forecastIcon)
+
+            // Creates Temp for a given day.
+            forecastTemp = document.createElement("p");
+            forecastTemp.setAttribute("class", "forecastData");
+            forecastTemp.setAttribute("id", "forecastTemp");
+            forecastTemp.innerHTML = `Temp: ${oneCallData.daily[i].temp.day}°F`;
+            forecastCard.appendChild(forecastTemp);
+
+            // Creates Wind for a given day.
+            forecastWind = document.createElement("p");
+            forecastWind.setAttribute("class", "forecastData");
+            forecastWind.setAttribute("id", "forecastWind");
+            forecastWind.innerHTML = `Wind: ${oneCallData.daily[i].wind_speed} MPH`;
+            forecastCard.appendChild(forecastWind);
+
+            // Creates Humidity for a given day.
+            forecastHum = document.createElement("p");
+            forecastHum.setAttribute("class", "forecastData");
+            forecastHum.setAttribute("id", "forecastHum");
+            forecastHum.innerHTML = `Humidity: ${oneCallData.daily[i].humidity}%`;
+            forecastCard.appendChild(forecastHum);
+        }
+    }
+
+    if (!forecastCard) {
+        makeForecast()
+    } else {
+        var cards = document.querySelectorAll(".forecastCard");
+        cards.forEach(card => {
+            card.remove();
+        });
+        makeForecast();
+    }
 }
 
 // This function clears out the saved searches in local storage.
@@ -147,6 +220,8 @@ function clearSearches (event) {
     localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
     searchedCitiesList()
 }
+
+// async function
 
 
 searchForm.addEventListener("submit", searchCity)

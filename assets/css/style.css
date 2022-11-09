@@ -81,9 +81,38 @@ button:hover {
     height: 45%;
 }
 
+.forecastCard {
+    display: inline-block;
+    border: 1px slategray solid;
+    height: auto;
+    width: 15%;
+    margin: 1%;
+    background-color: rgb(53, 68, 83);
+    color: white;
+    padding: 1%;
+}
+
+.forecastData {
+    padding-left: 1%;
+}
+
 @media only screen and (max-width: 374px) {
     #todayForecast {
         top: 18%;
         left: 25%;
+    }
+
+    #fiveDayCards {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .forecastCard {
+        width: 50%;
+        margin-left: 25%;
+    }
+
+    #cityButtons {
+        width: fit-content;
     }
 }
