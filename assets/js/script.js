@@ -52,7 +52,7 @@ if (prevSearchedCities == []) {
 // // This converts the user input into longitude and latitude so it can be utilized by the forecastCall function.
 var latLon = []
 function geoCode (city) {
-    var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${APIkey}`
+    var geoAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${APIkey}`
     var response = fetch(geoAPI).then((response) => {
         return response.json()
      }).then((data) => {
@@ -198,7 +198,7 @@ async function searchCity (event) {
             // Creates icons for forecastCards
             forecastIcon = document.createElement("img")
             forecastIcon.setAttribute("class", "forecastData")
-            forecastIcon.setAttribute("src", `http://openweathermap.org/img/wn/${oneCallData.daily[i].weather[0].icon}.png`)
+            forecastIcon.setAttribute("src", `https://openweathermap.org/img/wn/${oneCallData.daily[i].weather[0].icon}.png`)
             forecastCard.appendChild(forecastIcon)
 
             // Creates Temp for a given day.
