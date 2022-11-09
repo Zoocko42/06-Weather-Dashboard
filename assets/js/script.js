@@ -39,7 +39,9 @@ if (prevSearchedCities == []) {
     var searchedCities = prevSearchedCities;
 }
 
-localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
+
+localStorage.setItem("searchedCities", JSON.stringify(["Atlanta"]))
+// localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
 
 // // This converts the user input into longitude and latitude so it can be utilized by the forecastCall function.
 var latLon = []
